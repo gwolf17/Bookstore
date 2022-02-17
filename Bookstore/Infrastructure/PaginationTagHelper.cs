@@ -32,6 +32,13 @@ namespace Bookstore.Infrastructure
 
         public string PageAction { get; set; }
 
+        //Variables to hold class elements from Index page
+        public string PageClass { get; set; }
+        public bool ClassesEnabled { get; set; }
+        public string ClassNormal { get; set; }
+        public string ClassSelected { get; set; }
+
+
         //Override Process class
         public override void Process (TagHelperContext thc, TagHelperOutput tho)
         {
@@ -46,6 +53,15 @@ namespace Bookstore.Infrastructure
 
                 //Build each 'a' tag
                 tb.Attributes["href"] = uh.Action(PageAction, new { pageNum = i });
+
+                //Add css to the a tags
+                if (ClassesEnabled)
+                {
+                    tb.AddCssClass(PageClass);
+                    //Use different css for the current page tag
+                    tb.AddCssClass(i == PageInfo.CurrentPage ? ClassSelected : ClassNormal);
+                }
+
                 tb.InnerHtml.Append(i.ToString());  //Set the page# to be shown to the user
 
                 final.InnerHtml.AppendHtml(tb);  //Apend the results to the final results variable
