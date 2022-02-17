@@ -9,20 +9,28 @@
 <!--Loop through the books on each page and display the book info-->
 @foreach (Book b in Model.Books)
 {
-    <h3>@b.Title</h3>
+    <!--Put each book in a seperate css box-->
+    <div class="card card-outline-primary m-1 p-1">
 
-    <ul>
-        <li>@b.Author</li>
-        <li>@b.Publisher</li>
-        <li>@b.Isbn</li>
-        <li>@b.Classification</li>
-        <li>@b.Category</li>
-        <li>@b.PageCount</li>
-        <li>@b.Price</li>
-    </ul>
+        <div class="background-light p-1">
+            <h3>"@b.Title"</h3>
+            <h4>By: @b.Author</h4>
 
-    <br />
+            <span class="badge badge-secondary" style="float:right">
+                Price: $@b.Price
+            </span>
+        </div>
+
+        <ul>
+            <li>Category: @b.Category</li>
+            <li>Publisher: @b.Publisher</li>
+            <li>Classification: @b.Classification</li>
+            <li>Page Count: @b.PageCount</li>
+            <li>Isbn: @b.Isbn</li>
+        </ul>
+    </div>
 }
 
-<div page-info="@Model.PageInfo" page-action="Index" page-class="btn" class-enabled="true" 
-     class-normal="btn-"></div>
+<div page-info="@Model.PageInfo" page-action="Index" page-class="btn" classes-enabled="true" 
+     class-normal="btn-outline-dark" class-selected="btn-primary"
+     class="btn-group pull-right m-1"></div>

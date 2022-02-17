@@ -62,6 +62,8 @@ namespace Bookstore.Infrastructure
                     tb.AddCssClass(i == PageInfo.CurrentPage ? ClassSelected : ClassNormal);
                 }
 
+                tb.AddCssClass(PageClass);
+
                 tb.InnerHtml.Append(i.ToString());  //Set the page# to be shown to the user
 
                 final.InnerHtml.AppendHtml(tb);  //Apend the results to the final results variable
