@@ -47,7 +47,7 @@ namespace Bookstore.Infrastructure
             TagBuilder final = new TagBuilder("div");
 
             //For each page, dynamically build an 'a' tag with correct link
-            for (int i = 1; 1 <= PageInfo.TotalPages; i++)
+            for (int i = 1; i <= PageInfo.TotalPages; i++)
             {
                 TagBuilder tb = new TagBuilder("a");
 
