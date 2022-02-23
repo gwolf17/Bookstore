@@ -12,19 +12,8 @@
         <span class="navbar-brand m-1 g-2">BOOK LIST</span>
     </div>
 
-    <div class="row m-1 p-1">
-
-        <!--Left column-->
-        <div id="categories" class="col-3">
-            <vc:categories></vc:categories>  <!--Connect to the CategoriesViewComponent-->
-        </div>
-
-        <!--Body text will take up 3/4 of the page-->
-        <div class="col-9">
-            <div>
-                @RenderBody()
-            </div>
-        </div>
+    <div m-1 p-1>
+        @RenderBody()
     </div>
 </body>
 </html>

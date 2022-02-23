@@ -9,26 +9,8 @@
 <!--Loop through the books on each page and display the book info-->
 @foreach (Book b in Model.Books)
 {
-    <!--Put each book in a seperate css box-->
-    <div class="card card-outline-primary m-1 p-1">
-
-        <div class="background-light p-1">
-            <h3>"@b.Title"</h3>
-            <h4>By: @b.Author</h4>
-
-            <span class="badge badge-secondary" style="float:right">
-                Price: $@b.Price
-            </span>
-        </div>
-
-        <ul>
-            <li>Category: @b.Category</li>
-            <li>Publisher: @b.Publisher</li>
-            <li>Classification: @b.Classification</li>
-            <li>Page Count: @b.PageCount</li>
-            <li>Isbn: @b.Isbn</li>
-        </ul>
-    </div>
+    //Direct to the partial view page and pass in the model 'b'
+    <partial name="BookList" model="b" />
 }
 
 <div page-info="@Model.PageInfo" page-action="Index" page-class="btn" classes-enabled="true" 

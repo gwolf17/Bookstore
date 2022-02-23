@@ -1,0 +1,19 @@
+﻿@{
+}
+
+<!--Get the list being passed in by the CategoriesViewComponent page, all of type string-->
+@model IEnumerable<string>
+
+<div class="d-grid gap-2">
+    <!--Link back to the home page (no filters applied, reset categoryType and pageNum variables)-->
+    <a asp-controller="Home" asp-action="Index" asp-route-categoryType="" asp-route-pageNum="" class="btn btn-outline-secondary">Home</a>
+
+    <!--For each string passed in by our model...-->
+    @foreach (string c in Model)
+    {
+        //Dynamically create a tags for each string with the category type and page # selected. If the category of the button is selected, make the class
+        //"btn-primary", otherwise default to "btn-outline-secondary"
+        <a asp-controller="Home" asp-action="Index" asp-route-categoryType="@c" asp-route-pageNum="1"
+           class="btn @(ViewBag.SelectedCategory == c ? "btn-primary" : "btn-outline-secondary")">@c</a>
+    }
+</div>

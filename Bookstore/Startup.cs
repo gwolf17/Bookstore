@@ -17,7 +17,7 @@ namespace Bookstore
     {
         public IConfiguration Configuration { get; set; }
 
-        public Startup(IConfiguration configuration)
+        public Startup (IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -33,6 +33,11 @@ namespace Bookstore
             });
 
             services.AddScoped<IBookstoreRepository, EFBookstoreRepository>();  //Set up the repositories
+
+            services.AddRazorPages();  //Add to use Razor Pages
+
+            services.AddDistributedMemoryCache();
+            services.AddSession();  //Add these lines to use sessions
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,13 +51,31 @@ namespace Bookstore
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
+            app.UseSession();  //Add to use sessions
 
-            app.UseAuthorization();
+            app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
+                //Route for if a category and page # are selected
+                endpoints.MapControllerRoute("categorypage",
+                    "{categoryType}/Page{pageNum}",
+                    new { Controller = "Home", action = "Index" });
+
+                //Route for if just a page # is selected
+                endpoints.MapControllerRoute("page",
+                    "Page{pageNum}",
+                    new { Controller = "Home", action = "Index", pageNum = 1 });
+
+                //Route for if just a category type is selected
+                endpoints.MapControllerRoute("category",
+                    "{categoryType}",
+                    new { Controller = "Home", action = "Index", pageNum = 1 });
+
+                //Default controller route if no parameters are passed
                 endpoints.MapDefaultControllerRoute();
+
+                endpoints.MapRazorPages();  //Add endpoint for razor pages
             });
         }
     }
