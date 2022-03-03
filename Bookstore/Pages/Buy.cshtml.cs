@@ -14,32 +14,38 @@ namespace Bookstore.Pages
         //Instance of IBookstoreRepository
         private IBookstoreRepository repo { get; set; }
 
-        //Constructor
-        public BuyModel (IBookstoreRepository temp)
-        {
-            repo = temp;
-        }
-
         //Create cart and Url variables
         public Cart Cart { get; set; }  //Instance of the Cart model
         public string ReturnUrl { get; set; }
 
+        //Constructor
+        public BuyModel (IBookstoreRepository temp, Cart c)
+        {
+            repo = temp;
+            Cart = c;
+        }
+
         public void OnGet(string returnUrl)
         {
             ReturnUrl = returnUrl ?? "/";  //If not null, set ReturnUrl to the url passed in. Otherwise, use the home route (/)
-            Cart = HttpContext.Session.GetJson<Cart>("Cart") ?? new Cart();  //Use the previously created cart, or create a new one if it is null
         }
 
         public IActionResult OnPost(int bookId, string returnUrl)
         {
             Book b = repo.Books.FirstOrDefault(x => x.BookId == bookId);  //Find the corresponding book based on BookId
 
-            Cart = HttpContext.Session.GetJson<Cart>("Cart") ?? new Cart();  //Use the current cart, or create a new one if null
-            Cart.AddItem(b, 1); //Add an item and send in the Book and quantity
-
-            HttpContext.Session.SetJson("Cart", Cart);  //Set Json Cart object equal to whatever the Cart object is right now
+            Cart.AddBook(b, 1); //Add an item and send in the Book and quantity
 
             return RedirectToPage(new { ReturnUrl = returnUrl });  //Redirect to the page the user was on before
+        }
+
+        public IActionResult OnPostDelete (int bookId, string returnUrl)
+        {
+            //Remove the Book object that has the same Id as the bookId being passed in
+            Cart.RemoveBook(Cart.Items.First(x => x.Book.BookId == bookId).Book);
+
+            //Redirect the user to the returnUrl page
+            return RedirectToPage(new { ReturnUrl = returnUrl });
         }
     }
 }

@@ -2,10 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
-// If you have enabled NRTs for your project, then un-comment the following line:
-// #nullable disable
-
 namespace Bookstore.Models
 {
     public class BookstoreContext : DbContext
@@ -16,5 +12,8 @@ namespace Bookstore.Models
         }
 
         public DbSet<Book> Books { get; set; }
+
+        //Add this line to connect to the Purchase model
+        public DbSet<Purchase> Purchases { get; set; }
     }
 }

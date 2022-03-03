@@ -23,8 +23,21 @@
             <tr>
                 <td>@i.Book.Title</td>
                 <td>@i.Quantity</td>
-                <td>25</td>
-                <td>@(i.Quantity * 25)</td>
+                <td>$25.00</td>
+                <td>@((i.Quantity * 25).ToString("c"))</td>
+
+                <!--Delete button-->
+                <td class="text-center">
+                    <form method="post" asp-page-handler="Delete">
+                        <!--Input field to pass the BookId-->
+                        <input type="hidden" name="bookId" value="@i.Book.BookId"/>
+                        <!--Setting the return Url-->
+                        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+                        
+                        <!--Delete Button-->
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>
@@ -38,7 +51,10 @@
     </tfoot>
 </table>
 
-<!--Button to return to shopping-->
 <div>
+    <!--Button to return to shopping-->
     <a class="btn btn-primary" href="@Model.ReturnUrl">Continue Shopping</a>
+
+    <!--Checkout button-->
+    <a class="btn btn-primary" asp-controller="Checkout" asp-action="Checkout" >Checkout</a>
 </div>

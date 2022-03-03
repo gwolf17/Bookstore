@@ -1,6 +1,7 @@
 using Bookstore.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -33,11 +34,16 @@ namespace Bookstore
             });
 
             services.AddScoped<IBookstoreRepository, EFBookstoreRepository>();  //Set up the repositories
+            services.AddScoped<IPurchaseRepository, EFPurchaseRepository>();  //Set up Purchase repositories
 
             services.AddRazorPages();  //Add to use Razor Pages
 
             services.AddDistributedMemoryCache();
             services.AddSession();  //Add these lines to use sessions
+
+            //When we see a Cart object, call the SessionCart method which will get the current cart or create a new one if there isn't one
+            services.AddScoped<Cart>(x => SessionCart.GetCart(x));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

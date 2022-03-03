@@ -5,11 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Bookstore</title>
     <link href="~/lib/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/lib/font-awesome/css/all.min.css" rel="stylesheet" />
 </head>
 <body>
     <!--Css for page heading-->
     <div class="bg-dark text-white p-2">
-        <span class="navbar-brand m-1 g-2">BOOK LIST</span>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6 navbar-brand">
+                    BOOK LIST
+                    <!--Connects to CartSummary View-->
+                    <div class="col-6 float-right">
+                        <vc:cart-summary />
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="row m-1 p-1">
