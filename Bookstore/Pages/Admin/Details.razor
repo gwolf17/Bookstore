@@ -1,0 +1,41 @@
+﻿@page "/admin/books/details/{id:long}"
+<!--When this is the URL, send to this page-->
+
+<h3 class="bg-info text-white text-center p-1">Details</h3>
+
+<!--Table showing the book details-->
+<table class="table table-sm table-bordered table-striped">
+    <tbody>
+        <tr><th>Book Id:</th>@b.BookId</tr>
+        <tr><th>Title:</th>@b.Title</tr>
+        <tr><th>Author:</th>@b.Author</tr>
+        <tr><th>Publisher:</th>@b.Publisher</tr>
+        <tr><th>Isbn:</th>@b.Isbn</tr>
+        <tr><th>Classification:</th>@b.Classification</tr>
+        <tr><th>Category:</th>@b.Category</tr>
+        <tr><th>Page Count:</th>@b.PageCount</tr>
+        <tr><th>Price:</th>@b.Price</tr>
+    </tbody>
+</table>
+
+<!--Buttons to edit or go back-->
+<NavLink class="btn btn-warning" href="@EditUrl">Edit</NavLink>
+<NavLink class="btn btn-secondary" href="/admin/books">Back</NavLink>
+
+@code {
+    [Inject]  //Indicates that the variable should have a value injected from the service provider on initialization
+    public IBookstoreRepository repo { get; set; }
+
+    [Parameter]
+    public long id { get; set; }  //Get the id sent in the URL
+    public Book b { get; set; }  //Instance of a book object
+
+    //Method to grab the right book record
+    protected override void OnParametersSet()
+    {
+        b = repo.Books.FirstOrDefault(x => x.BookId == id);
+    }
+
+    //Method for the Edit URL
+    public string EditUrl => $"/admin/books/edit/{b.BookId}";
+}

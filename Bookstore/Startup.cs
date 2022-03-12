@@ -34,7 +34,7 @@ namespace Bookstore
             });
 
             services.AddScoped<IBookstoreRepository, EFBookstoreRepository>();  //Set up the repositories
-            services.AddScoped<IPurchaseRepository, EFPurchaseRepository>();  //Set up Purchase repositories
+            services.AddScoped<IShippingRepository, EFShippingRepository>();  //Set up Purchase repositories
 
             services.AddRazorPages();  //Add to use Razor Pages
 
@@ -44,6 +44,8 @@ namespace Bookstore
             //When we see a Cart object, call the SessionCart method which will get the current cart or create a new one if there isn't one
             services.AddScoped<Cart>(x => SessionCart.GetCart(x));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddServerSideBlazor();  //Add to use Blazor
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,6 +84,10 @@ namespace Bookstore
                 endpoints.MapDefaultControllerRoute();
 
                 endpoints.MapRazorPages();  //Add endpoint for razor pages
+
+                //Blazor Pages
+                endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/admin/{*catchall}", "/Admin/Index");  //If you don't get anything, send them to the Index page
             });
         }
     }

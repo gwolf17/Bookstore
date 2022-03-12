@@ -1,0 +1,30 @@
+﻿<!--Inherits from parent layout class-->
+@inherits LayoutComponentBase
+<!--Header-->
+<div clss="bg-info text-white p-2">
+    <span class="navbar-brand m-lg-2">Bookstore Project Administration</span>
+</div>
+
+<div class="container-fluid">
+
+    <div class="row p-2">
+
+        <div class="col-3">
+            <div class="d-grid gap-2">
+                <!--Nav links rather than a tags-->
+                <NavLink class="btn btn-outline-primary" href="/admin/books"
+                         ActiveClass="btn-primary text-white" Match="NavLinkMatch.Prefix">Books</NavLink>
+                <NavLink class="btn btn-outline-primary" href="/admin/shipping"
+                         ActiveClass="btn-primary text-white" Match="NavLinkMatch.Prefix">Shipping</NavLink>
+            </div>
+        </div>
+
+        <!--This is where the body text will go-->
+        <div class="col">
+            @Body
+        </div>
+
+    </div>
+
+
+</div>

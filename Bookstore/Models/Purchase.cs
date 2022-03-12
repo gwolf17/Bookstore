@@ -31,5 +31,9 @@ namespace Bookstore.Models
         [Required(ErrorMessage = "Country field cannot be blank")]
         public string Country { get; set; }
         public bool Gift { get; set; }  //Is this order a gift?
+
+        //Variable to keep track of shipping
+        [BindNever]
+        public bool OrderShipped { get; set; }
     }
 }

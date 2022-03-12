@@ -1,0 +1,53 @@
+﻿<!--Path to this page-->
+@page "/admin/shipping"
+
+@inherits OwningComponentBase<IShippingRepository>
+
+<!--Add in a shipping table object-->
+
+<!--Table for Orders not shipped-->
+<ShippingTable TableTitle="Orders Not Shipped" Purchases="NonShippedPurchases"
+               ButtonLabel="Shipped" PurchaseSelected="OrderShipped"></ShippingTable>
+
+<!--Table for shipped Orders-->
+<ShippingTable TableTitle="Shipped Orders" Purchases="ShippedPurchases"
+               ButtonLabel="Not Shipped" PurchaseSelected="NotShipped"></ShippingTable>
+
+@code {
+    //Load this repo variable with an IShippingRepository object
+    public IShippingRepository repo => Service;
+
+    //Declare variables
+    public IEnumerable<Purchase> AllPurchases { get; set; }
+    public IEnumerable<Purchase> NonShippedPurchases { get; set; }
+    public IEnumerable<Purchase> ShippedPurchases { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await UpdateData();
+    }
+
+    //Populate the above variables
+    public async Task UpdateData()
+    {
+        //Store all purchases to a list
+        AllPurchases = await repo.Purchases.ToListAsync();
+
+        //Find instances were the order has not (!) been shipped
+        NonShippedPurchases = AllPurchases.Where(x => !x.OrderShipped);
+
+        //Find instances were the order has been shipped
+        ShippedPurchases = AllPurchases.Where(x => x.OrderShipped);
+    }
+
+    //Methods to change the shipping status of an order
+    public void OrderShipped(int id) => UpdateShipping(id, true);
+    public void NotShipped(int id) => UpdateShipping(id, false);
+
+    private void UpdateShipping(int id, bool shipped)
+    {
+        Purchase p = repo.Purchases.FirstOrDefault(x => x.PurchaseId == id);  //Find the corresponding purchase
+        p.OrderShipped = shipped;  //Change OrderShipped variable
+        repo.SavePurchase(p);  //Save changes
+    }
+}

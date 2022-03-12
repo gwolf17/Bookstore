@@ -10,11 +10,11 @@ namespace Bookstore.Controllers
 {
     public class CheckoutController : Controller
     {
-        private IPurchaseRepository repo { get; set; }  //Instance of our repository
+        private IShippingRepository repo { get; set; }  //Instance of our repository
         private Cart cart { get; set; }  //Instance of our Cart
 
         //Constructor (set up repositories and our cart)
-        public CheckoutController (IPurchaseRepository temp, Cart c)
+        public CheckoutController (IShippingRepository temp, Cart c)
         {
             repo = temp;
             cart = c;

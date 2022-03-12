@@ -1,0 +1,15 @@
+﻿<Router AppAssembly="typeof(Startup).Assembly">
+
+    <!--If found, do the following-->
+    <Found>
+        <!--Use whats in the URL to direct the page, rather than just displaying a page-->
+        <RouteView RouteData="@context" DefaultLayout="typeof(AdminLayout)"></RouteView>
+    </Found>
+
+    <!--If the route isn't found'-->
+    <NotFound>
+        <!--Error message-->
+        <h4 class="bg-danger text-white text-center p-2">No Mathcing Route Found</h4>
+    </NotFound>
+
+</Router>

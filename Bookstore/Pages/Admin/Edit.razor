@@ -1,0 +1,125 @@
+﻿<!--This is the page for creating or editing records-->
+@page "/admin/books/edit/{id:long}"
+@page "/admin/books/create"
+
+@inherits OwningComponentBase<IBookstoreRepository>
+
+<!--Styling for validation text-->
+<style>
+    div.validation-message {
+        color: rgb(220,53,69);
+        font-weight: 500
+    }
+</style>
+
+<!--Title will change based on if we are creating or updating a record-->
+<h3 class="bg-@ThemeColor text-white text-center p-1">@TitleText</h3>
+
+<!--Create/Edit form-->
+<EditForm Model="b" OnValidSubmit="SaveBook">
+
+    <!--Show validation errors-->
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+
+    <!--Fields from the Book.cs model-->
+    <div class="form-group">
+        <label>Book Id</label>
+        <input class="form-control" disabled value="@b.BookId" />  <!--Disabled so the user can't change the Id'-->
+    </div>
+
+    <!--Title-->
+    <div class="form-group">
+        <label>Title:</label>
+        <ValidationMessage For="@(() => b.Title)"></ValidationMessage>
+        <InputText class="form-control" @bind-Value="b.Title"></InputText>  <!--Instead of an input tag-->
+    </div>
+    <!--Author-->
+    <div class="form-goup">
+        <label>Author:</label>
+        <ValidationMessage For="@(() => b.Author)"></ValidationMessage>
+        <InputText class="form-control" @bind-Value="b.Author"></InputText>
+    </div>
+    <!--Publisher-->
+    <div class="form-goup">
+        <label>Publisher:</label>
+        <ValidationMessage For="@(() => b.Publisher)"></ValidationMessage>
+        <InputText class="form-control" @bind-Value="b.Publisher"></InputText>
+    </div>
+    <!--Isbn-->
+    <div class="form-goup">
+        <label>Isbn:</label>
+        <ValidationMessage For="@(() => b.Isbn)"></ValidationMessage>
+        <InputText class="form-control" @bind-Value="b.Isbn"></InputText>
+    </div>
+    <!--Classification-->
+    <div class="form-goup">
+        <label>Classification:</label>
+        <ValidationMessage For="@(() => b.Classification)"></ValidationMessage>
+        <InputText class="form-control" @bind-Value="b.Classification"></InputText>
+    </div>
+    <!--Category-->
+    <div class="form-goup">
+        <label>Category:</label>
+        <ValidationMessage For="@(() => b.Category)"></ValidationMessage>
+        <InputText class="form-control" @bind-Value="b.Category"></InputText>
+    </div>
+    <!--Page Count-->
+    <div class="form-goup">
+        <label>Page Count:</label>
+        <ValidationMessage For="@(() => b.PageCount)"></ValidationMessage>
+        <InputNumber class="form-control" @bind-Value="b.PageCount"></InputNumber>
+    </div>
+    <!--Price-->
+    <div class="form-goup">
+        <label>Price:</label>
+        <ValidationMessage For="@(() => b.Price)"></ValidationMessage>
+        <InputNumber class="form-control" @bind-Value="b.Price"></InputNumber>
+    </div>
+
+    <!--Button to save-->
+    <button class="btn btn-@ThemeColor" type="submit">Save</button>
+    <!--Link back to previous page-->
+    <NavLink class="btn btn-secondary" href="/admin/books">Cancel</NavLink>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public long Id { get; set; } = 0;
+
+    //Variable to pass correct theme color
+    public string ThemeColor => Id == 0 ? "primary" : "warning";  //If new record, set to primary, else, set to warning
+    //Variable to set correct title
+    public string TitleText => Id == 0 ? "Create" : "Edit";  //If new record, title should be "Create", else, it should be "Edit"
+
+    public Book b { get; set; } = new Book();  //If no book object being passed, create a new one
+    public IBookstoreRepository repo => Service;
+
+    //Method to fill in the input fields if a book object is being passed
+    protected override void OnParametersSet()
+    {
+        if (Id != 0)
+        {
+            b = repo.Books.FirstOrDefault(x => x.BookId == Id);
+        }
+    }
+
+    public void SaveBook()
+    {
+        if (Id == 0)
+        {
+            repo.AddBook(b);  //Call the AddBook function in the EFBookstoreRepository
+        }
+        else
+        {
+            repo.SaveBook(b);  //Call the SaveBook function in the EFBookstoreRepository
+        }
+
+        //Use Nav Manager to send back to books page once saved
+        NavManager.NavigateTo("/admin/books");
+    }
+
+    //Navigation Manager
+    [Inject]
+    public NavigationManager NavManager { get; set; }
+}

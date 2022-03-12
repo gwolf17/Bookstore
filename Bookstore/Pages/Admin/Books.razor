@@ -1,0 +1,84 @@
+﻿@page "/admin/books"
+@page "/admin"
+<!--If the user calls for /admin/books or /admin, send them to this page-->
+
+@inherits OwningComponentBase<IBookstoreRepository>
+
+<h3>Books</h3>
+
+<!--Table containing the list of books-->
+<table class="table table-sm table-striped table-bordered table-responsive-*">
+
+    <thead>
+        <tr>
+            <td>Book Id</td>
+            <td>Title</td>
+            <td>Category</td>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (BookList?.Count() > 0)   //If there are books to display, display their info in the table
+        {
+            //List each book
+            @foreach (Book b in BookList)
+            {
+                <tr>
+                    <td>@b.BookId</td>
+                    <td>@b.Title</td>
+                    <td>@b.Category</td>
+
+                    <!--Details button-->
+                    <td>
+                        <NavLink class="btn btn-info btn-sm" href="@GetDetailsUrl(b.BookId)">Details</NavLink>
+                    </td>
+                    <!--Edit button-->
+                    <td>
+                        <NavLink class="btn btn-info btn-sm" href="@GetEditUrl(b.BookId)">Edit</NavLink>
+                    </td>
+                    <!--Delete button-->
+                    <td>
+                        <button class=" btn btn-danger btn-sm" @onclick="@(x => RemoveBook(b))">Delete</button>
+                    </td>
+                </tr>
+            }
+        }
+        else  //If no books, display message
+        {
+            <tr>
+                <td colspan="5" class="text-center">No Books to Display</td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+<!--Button to create a new book-->
+<NavLink class="btn btn-primary" href="/admin/books/create">Create</NavLink>  
+
+@code {
+    public IBookstoreRepository repo => Service;  //Instance of the repository
+    public IEnumerable<Book> BookList { get; set; }  //Variable containing the books in our database
+
+    //Methods to populate variables
+    protected async override Task OnInitializedAsync()
+    {
+        await UpdateData();
+    }
+
+    public async Task UpdateData()
+    {
+        BookList = await repo.Books.ToListAsync();
+    }
+
+    //Methods for Get Details and Edit buttons above
+    public string GetDetailsUrl(long id) => $"/admin/books/details/{id}";
+    public string GetEditUrl(long id) => $"/admin/books/edit/{id}";
+
+    //Delete function for link above
+    public async Task RemoveBook(Book b)
+    {
+        repo.DeleteBook(b);  //Calls method in EFBookstore repository
+        await UpdateData();
+    }
+}
