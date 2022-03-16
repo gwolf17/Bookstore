@@ -1,8 +1,24 @@
 ﻿<!--Inherits from parent layout class-->
 @inherits LayoutComponentBase
+
 <!--Header-->
 <div clss="bg-info text-white p-2">
-    <span class="navbar-brand m-lg-2">Bookstore Project Administration</span>
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col">
+                <span class="navbar-brand m-lg-2">Bookstore Administration</span>
+            </div>
+
+            <!--Logout Button-->
+            <div class="col-2 text-right">
+                <a class="btn btn-sm btn-primary" href="/account/logout">Log Out</a>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
 <div class="container-fluid">

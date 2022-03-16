@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +33,16 @@ namespace Bookstore
             {
                 options.UseSqlite(Configuration["ConnectionStrings:BookstoreDBConnection"]);   //Connect to your connection string
             });
+
+            //Add in Identity Database
+            services.AddDbContext<AppIdentityDBContext>(options =>
+            {
+                options.UseSqlite(Configuration["ConnectionStrings:IdentityConnection"]);
+            });
+
+            //Add these lines for the Identity Database as well
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppIdentityDBContext>();
 
             services.AddScoped<IBookstoreRepository, EFBookstoreRepository>();  //Set up the repositories
             services.AddScoped<IShippingRepository, EFShippingRepository>();  //Set up Purchase repositories
@@ -63,6 +74,11 @@ namespace Bookstore
 
             app.UseRouting();
 
+            //MUST add these lines between UseRouting and UseEndpoints
+            //Use authorization and authentication before going to the endpoints
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 //Route for if a category and page # are selected
@@ -89,6 +105,9 @@ namespace Bookstore
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/admin/{*catchall}", "/Admin/Index");  //If you don't get anything, send them to the Index page
             });
+
+            //Call IdentitySeedData class directly
+            IdentitySeedData.EnsurePopulated(app);  //Pass the app variable to the class
         }
     }
 }

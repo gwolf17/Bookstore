@@ -6,35 +6,45 @@
 <!--Put each book in a seperate css box-->
 <div class="card card-outline-primary m-1 p-1 shadow">
 
-    <div class="background-light p-1">
+    <!--Header-->
+    <div class="card-header">
         <h3>"@Model.Title"</h3>
-        <h4>By: @Model.Author</h4>
+    </div>
+
+    <!--Card body-->
+    <div class="card-body">
+        <div class="card-title">
+            <h4>By: @Model.Author</h4>
+        </div>
 
         <span class="badge badge-secondary" style="float:right">
             Price: $@Model.Price
         </span>
+        <br />
+
+        <div class="card-text">
+            <ul style="list-style-type: none; font-size:medium">
+                <li>Category: @Model.Category</li>
+                <li>Publisher: @Model.Publisher</li>
+                <li>Classification: @Model.Classification</li>
+                <li>Page Count: @Model.PageCount</li>
+                <li>Isbn: @Model.Isbn</li>
+            </ul>
+        </div>
+
+        <!--Form for add to cart button-->
+        <form method="post" asp-page="/Buy">
+            <!--Send book id with the form-->
+            <input type="hidden" asp-for="@Model.BookId" />
+
+            <!--Pass info that will enable to return to this page later-->
+            <input type="hidden" name="returnUrl" value="@ViewContext.HttpContext.Request.PathAndQuery()" />
+
+            <!--Submit button-->
+            <span class="card-text">
+                <button type="submit" class="btn btn-success btn-small float-end">Add to Cart</button>
+            </span>
+        </form>
     </div>
-
-    <ul>
-        <li>Category: @Model.Category</li>
-        <li>Publisher: @Model.Publisher</li>
-        <li>Classification: @Model.Classification</li>
-        <li>Page Count: @Model.PageCount</li>
-        <li>Isbn: @Model.Isbn</li>
-    </ul>
-
-    <!--Form for add to cart button-->
-    <form method="post" asp-page="/Buy">
-        <!--Send book id with the form-->
-        <input type="hidden" asp-for="@Model.BookId" />
-        
-        <!--Pass info that will enable to return to this page later-->
-        <input type="hidden" name="returnUrl" value="@ViewContext.HttpContext.Request.PathAndQuery()" />
-
-        <!--Submit button-->
-        <span class="card-text">
-            <button type="submit" class="btn btn-success btn-small float-end">Add to Cart</button>
-        </span>
-    </form>
 
 </div>

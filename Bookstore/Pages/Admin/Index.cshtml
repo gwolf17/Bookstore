@@ -1,6 +1,10 @@
 ﻿@page "/admin"
 <!--When people go to /admin, send them to this page-->
 
+<!--Take the user to the login page first-->
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
 @model Bookstore.Pages.Admin.IndexModel
 @{
 }
